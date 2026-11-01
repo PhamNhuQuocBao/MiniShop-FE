@@ -1,0 +1,6 @@
+'use server';
+import { cookies } from 'next/headers';
+import { api, Order, User } from './api';
+export async function loginAction(_prev:{error:string},form:FormData){try{const email=String(form.get('email')||'');const password=String(form.get('password')||'');const data=await api<{token:string;user:User}>('/api/auth/login',{method:'POST',body:JSON.stringify({email,password})});(await cookies()).set('minishop_session',data.token,{httpOnly:true,sameSite:'lax',secure:process.env.NODE_ENV==='production',path:'/',maxAge:604800});return {error:'',ok:true};}catch(e){return {error:e instanceof Error?e.message:'Đăng nhập thất bại',ok:false};}}
+export async function logoutAction(){(await cookies()).delete('minishop_session');}
+export async function placeOrderAction(input:{shipping:{name:string;phone:string;address:string};items:{productId:string;quantity:number}[]}):Promise<{order?:Order;error?:string}>{try{const token=(await cookies()).get('minishop_session')?.value;const data=await api<{order:Order}>('/api/orders',{method:'POST',headers:token?{Authorization:`Bearer ${token}`}:{},body:JSON.stringify(input)});return {order:data.order};}catch(e){return {error:e instanceof Error?e.message:'Không thể đặt hàng'};}}

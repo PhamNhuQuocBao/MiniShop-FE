@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: minishop-frontend
+    runtime: node
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.18.0
+      - key: API_BASE_URL
+        sync: false
