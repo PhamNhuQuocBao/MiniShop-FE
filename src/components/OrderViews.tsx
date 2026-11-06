@@ -25,6 +25,6 @@ export function OrderDetail({ order }: { order: Order }) {
       <p>Người nhận: {order.shipping.name}</p><p>Điện thoại: {order.shipping.phone}</p><p>Địa chỉ: {order.shipping.address}</p></div>
     <div className="summary"><h2>Sản phẩm</h2>{order.items.map(item => <p key={item.productId}>
       {item.name} × {item.quantity} — {money(item.unitPrice * item.quantity)}
-    </p>)}<p className="orderTotal">Tổng tiền: {money(order.total)}</p></div>
+    </p>)}<p>Tạm tính: {money(order.subtotal)}</p>{order.discounts?.map(discount => <p key={discount.code}>{discount.code}: −{money(discount.amount)}</p>)}<p className="orderTotal">Tổng tiền: {money(order.total)}</p></div>
   </div>;
 }

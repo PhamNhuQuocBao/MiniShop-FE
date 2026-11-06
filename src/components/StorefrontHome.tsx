@@ -1,6 +1,7 @@
 import { api, Product } from '@/lib/api';
 import { ProductCard } from '@/components/ProductCard';
 import type { Device, Variant } from '@/lib/experiment';
+import { ProductSearchResults } from '@/components/ProductSearchResults';
 
 const heroCopy = {
   A: { eyebrow: 'GÓC LÀM VIỆC CỦA BẠN', title: 'Phụ kiện nhỏ.', accent: 'Trải nghiệm lớn.', description: 'Chọn những món đồ gọn gàng, hữu ích cho ngày làm việc tốt hơn.', art: '✳' },
@@ -21,8 +22,8 @@ export async function StorefrontHome({ q, prefix = '', variant, device, page = '
       <div className="heroCopy"><span className="eyebrow">{hero.eyebrow}</span><h1>{hero.title}<br/><em>{hero.accent}</em></h1><p>{hero.description}</p><a className="button" href="#products">{isPlp ? 'Xem danh mục' : 'Khám phá sản phẩm'}</a></div>
       <div className="heroArt" aria-hidden="true">{hero.art}</div>
     </section>
-    <section id="products" className="section"><div className="sectionHead"><div><span className="eyebrow">{isPlp ? 'DANH MỤC SẢN PHẨM' : 'BỘ SƯU TẬP'}</span><h2>{isPlp ? 'Tất cả sản phẩm' : 'Sản phẩm nổi bật'}</h2></div><form method="get"><input name="q" defaultValue={q} placeholder="Tìm theo tên sản phẩm..." aria-label="Tìm sản phẩm"/><button>Tìm kiếm</button></form></div>
-      {error ? <div className="notice error">{error}</div> : products.length ? <div className={`grid experimentGrid experimentGrid--${variant.toLowerCase()}${isPlp ? ` plpGrid plpGrid--${device}` : ''}`}>{products.map(p => <ProductCard key={p.id} product={p} prefix={prefix}/>)}</div> : <div className="notice">Không có sản phẩm phù hợp.</div>}
+    <section id="products" className="section"><div className="sectionHead"><div><span className="eyebrow">{isPlp ? 'DANH MỤC SẢN PHẨM' : 'BỘ SƯU TẬP'}</span><h2>{isPlp ? 'Tất cả sản phẩm' : 'Sản phẩm nổi bật'}</h2></div>{!isPlp && <form method="get"><input name="q" defaultValue={q} placeholder="Tìm theo tên sản phẩm..." aria-label="Tìm sản phẩm"/><button>Tìm kiếm</button></form>}</div>
+      {isPlp ? <ProductSearchResults key={q} initialProducts={products} initialQuery={q} initialError={error} prefix={prefix} variant={variant} device={device}/> : error ? <div className="notice error">{error}</div> : products.length ? <div className={`grid experimentGrid experimentGrid--${variant.toLowerCase()}`}>{products.map(p => <ProductCard key={p.id} product={p} prefix={prefix}/>)}</div> : <div className="notice">Không có sản phẩm phù hợp.</div>}
     </section>
   </div>;
 }

@@ -38,6 +38,12 @@ Middleware gán `ab_variant` là A, B hoặc C với xác suất bằng nhau và
 
 Hướng dẫn QA: mở `/` và `/products`, đối chiếu badge với layout; trong DevTools Application → Cookies, đặt `ab_variant` lần lượt `A`, `B`, `C` và `device` lần lượt `mobile`, `desktop`, rồi tải lại trang để xem từng tổ hợp. Xóa hai cookie và tải lại để xem assignment cho khách mới. Đây là hướng dẫn QA; agent chưa chạy kiểm thử thủ công. Vì HTML được chọn theo cookie ở server, các page này render theo request và không dùng full-route cache chung.
 
+## Giỏ hàng và coupon
+
+Giỏ guest lưu trong cookie HttpOnly `minishop_guest_cart` do backend ký (7 ngày); giỏ user đăng nhập lưu trong MongoDB. Khi đăng nhập, giỏ guest được nhập vào giỏ tài khoản. `/cart` cho đổi số lượng, xóa dòng, thêm/xóa coupon; checkout hiển thị tạm tính, các khoản giảm và tổng do backend tính lại. Tìm kiếm trên `/products` gửi `FilterNode[]` qua Server Action tới backend; bộ chọn sản phẩm trên `/admin/products` dùng cùng action. Không cần thêm package hoặc seed frontend.
+
+Hướng dẫn QA: với khách chưa đăng nhập, thêm Chuột Aero và Bàn phím Mini 68 vào giỏ, áp dụng `SUMMER10`, `SHIP50`, `BUNDLE150`, rồi `STACK5`; xem tổng sau giảm ở giỏ và đơn sau checkout. Thử `BOGOMOUSE` với 2 Chuột Aero, `DESK80` với 2 món thuộc nhóm bàn làm việc, và `WELCOME5` cùng `SUMMER10` để thấy lỗi loại trừ. Tải lại trang để xem giỏ guest còn; đăng nhập Alice để xem giỏ nhập vào tài khoản. Thử lọc tên, danh mục, khoảng giá trên `/products`, và tìm/chọn sản phẩm ở `/admin/products` bằng admin. Agent chưa chạy các bước QA này.
+
 ## Dashboard lab
 
 Đăng nhập tài khoản admin tại `/login`, sau đó mở `/account` → **Mở dashboard mẫu**. Login đặt cookie HttpOnly `minishop_session` sau khi BE xác thực. Middleware FE dùng cookie để hỏi BE `/api/auth/me` và chỉ cho role `admin` vào `/dashboard` và `/api/admin/demo`. Thiếu phiên: dashboard chuyển tới login, API trả 401; tài khoản customer: dashboard chuyển về account, API trả 403. Hai route lab chỉ trả dữ liệu giả và marker `ADMIN_DEMO_ONLY`. `/admin` cũ và API nghiệp vụ BE vẫn có kiểm tra quyền riêng.
