@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-type DemoUser = { role: 'customer' | 'admin' };
+type DemoUser = { role: 'CUSTOMER' | 'ADMIN' };
 
 export async function middleware(request: NextRequest) {
   const isApi = request.nextUrl.pathname.startsWith('/api/admin/demo');
@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
     if (!response.ok) return deny(request, isApi, 401);
 
     const data = (await response.json()) as { user?: DemoUser };
-    if (data.user?.role !== 'admin') return deny(request, isApi, 403);
+    if (data.user?.role !== 'ADMIN') return deny(request, isApi, 403);
     return NextResponse.next();
   } catch {
     return isApi
