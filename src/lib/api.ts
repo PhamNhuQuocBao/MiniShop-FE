@@ -1,4 +1,4 @@
-export type Product={id:string;name:string;slug:string;description:string;image:string;price:number;stock:number};
+export type Product={id:string;name:string;slug:string;description:string;image:string;supplierImageUrl?:string;price:number;stock:number};
 export type User={id:string;name:string;email:string;phone:string;role:'CUSTOMER'|'ADMIN'};
 export type Address={id:string;label:string;name:string;phone:string;address:string};
 export type Order={id:string;code:string;userId:string|null;shipping:{name:string;phone:string;address:string};items:{productId:string;name:string;unitPrice:number;quantity:number}[];total:number;status:string;shippingStatus:string;trackingNumber:string;createdAt:string;updatedAt:string};

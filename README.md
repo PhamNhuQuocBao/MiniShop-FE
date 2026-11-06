@@ -26,6 +26,12 @@ Sau khi backend seed, dùng `alice@minishop.local`, `bob@minishop.local` hoặc 
 
 Hướng dẫn QA: đăng nhập Alice và Bob riêng để đối chiếu đơn của từng người; thử mở URL chi tiết đơn của người kia; sửa hồ sơ, thêm địa chỉ; đăng nhập admin để xem cả tám đơn và danh mục. Chưa chạy các bước này trong lúc phát triển.
 
+## Storefront khu vực và liên kết đối tác
+
+Các URL `/us`, `/eu`, `/vn` có trang danh sách, chi tiết sản phẩm, giỏ hàng và checkout riêng theo prefix. Middleware lưu cookie `region` trong 30 ngày, mặc định `us`. Muốn ánh xạ hostname khu vực, đặt `REGION_HOSTS` trước **khi build FE**, ví dụ `{"shop.example.us":"us","shop.example.eu":"eu"}`; nếu bỏ trống, các rewrite theo hostname không được tạo. Hostname được so khớp từ request, không cần thêm domain vào source code. Cần trỏ DNS/domain về FE ngoài cấu hình này.
+
+Product card và chi tiết dùng `/api/img?src=<URL>` khi sản phẩm có `supplierImageUrl`; proxy trả ảnh từ nhà cung cấp hoặc SVG MiniShop nếu fetch lỗi. QA có thể dùng ảnh seed của Chuột không dây Aero để xem luồng này. `/partner/out/<partnerId>` lấy URL từ backend rồi thêm `utm_source=minishop`, `utm_medium=partner`, `utm_campaign=<region>` và redirect; `?dest=<URL>` thay URL đích để team partnerships xem trước. Ba ID seed: `700000000000000000000001`, `700000000000000000000002`, `700000000000000000000003`; URL mẫu là example.com và cần đổi thành tracking URL thật trước khi dùng. QA có thể mở từng prefix, xem cookie `region`, đi qua card → giỏ → checkout, rồi xem Location của link đối tác và thử `dest` hợp lệ. Agent chưa chạy các bước QA này.
+
 ## Dashboard lab
 
 Đăng nhập tài khoản admin tại `/login`, sau đó mở `/account` → **Mở dashboard mẫu**. Login đặt cookie HttpOnly `minishop_session` sau khi BE xác thực. Middleware FE dùng cookie để hỏi BE `/api/auth/me` và chỉ cho role `admin` vào `/dashboard` và `/api/admin/demo`. Thiếu phiên: dashboard chuyển tới login, API trả 401; tài khoản customer: dashboard chuyển về account, API trả 403. Hai route lab chỉ trả dữ liệu giả và marker `ADMIN_DEMO_ONLY`. `/admin` cũ và API nghiệp vụ BE vẫn có kiểm tra quyền riêng.
