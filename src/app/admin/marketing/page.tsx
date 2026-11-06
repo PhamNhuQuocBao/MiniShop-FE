@@ -30,7 +30,7 @@ export default async function MarketingPage() {
     <Link href="/admin" className="breadcrumbs">← Quản trị</Link>
     <span className="eyebrow">MARKETING</span>
     <h1>Marketing Script Manager</h1>
-    <p className="lead">Quản lý JavaScript tracking. Paste phần bên trong thẻ script, không paste cả thẻ HTML.</p>
+    <p className="lead">Quản lý JavaScript tracking từ đối tác và agency. Paste nội dung JavaScript để chạy trên storefront.</p>
     <CreateSnippetForm />
     <h2>Danh sách snippet</h2>
     {loadError ? <p className="notice error">{loadError}</p> : snippets.length === 0 ? <p className="notice">Chưa có snippet nào.</p> :
