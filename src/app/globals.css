@@ -122,6 +122,9 @@ input::placeholder, textarea::placeholder { color: #8a97aa; }
 .purchase label { display: flex; align-items: center; gap: 15px; margin-bottom: 17px; font-size: 13px; font-weight: 700; }
 .purchase input { width: 80px; }
 .purchase button { min-width: 195px; }
+.productSpecs { margin: 30px 0 20px; border-top: 1px solid var(--line); padding-top: 22px; }
+.productSpecs h2 { margin: 0 0 14px; font-size: 17px; letter-spacing: -.02em; }
+.productSpecs ul { display: grid; gap: 10px; margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.5; }
 .twoCol { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(295px, .8fr); align-items: start; gap: 30px; }
 .cartList, .summary, .form, .adminPicker { border: 1px solid var(--line); border-radius: 18px; background: #fff; }
 .cartList { padding: 8px 24px; }

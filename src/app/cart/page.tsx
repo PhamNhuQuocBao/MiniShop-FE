@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/components/CartProvider';
-import { icon } from '@/components/ProductCard';
+import { productVisual } from '@/components/ProductCard';
 import { money } from '@/lib/api';
 import { regionPrefix } from '@/lib/region';
 
@@ -19,7 +19,7 @@ export default function CartPage() {
     <h1>Giỏ hàng của bạn</h1>
     {!ready ? <div className="notice">Đang tải giỏ hàng...</div> : items.length ? <div className="twoCol">
       <div className="cartList">{items.map(({ lineId, product, quantity: lineQuantity }) => <div className="cartRow" key={lineId}>
-        <div className="miniArt" aria-hidden="true">{icon(product.image)}</div>
+        <div className="miniArt" aria-hidden="true">{productVisual(product)}</div>
         <div><Link href={`${prefix}/products/${product.id}`}><strong>{product.name}</strong></Link><p>{money(product.price)}</p><button className="linkBtn" disabled={busy} onClick={() => void remove(lineId)}>Xóa sản phẩm</button></div>
         <label>Số lượng<input type="number" min="1" max={product.stock} value={lineQuantity} disabled={busy} onChange={event => void setQuantity(lineId, Number(event.target.value) || 1)}/></label>
       </div>)}</div>

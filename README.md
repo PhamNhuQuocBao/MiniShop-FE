@@ -18,6 +18,8 @@ Build production: `npm run build && npm start`. Health: `/api/health`. Browser g
 
 Đăng nhập tài khoản admin rồi mở `/admin/marketing` để thêm, sửa, xoá, bật/tắt hoặc preview snippet. `scriptBody` chỉ nhận JavaScript thuần; nếu agency gửi nguyên thẻ `<script>`, hãy paste **phần bên trong thẻ**. Preview chạy riêng snippet được chọn trong một giờ, kể cả khi đang tắt; banner “Thoát preview” đưa bạn về trang quản trị. Các snippet seed dùng ID provider giả và mặc định tắt, cần thay bằng ID thật trước khi dùng tracking.
 
+Tám ảnh sản phẩm mẫu nằm trong `public/products` dưới dạng WebP, được tạo bằng AI để minh họa catalog. Backend seed lưu đường dẫn local, mô tả và thông số demo vào MongoDB. Đây không phải ảnh hoặc thông số của sản phẩm thương mại thật.
+
 QA có thể tự kiểm tra sau khi seed backend: mở trang quản trị bằng tài khoản admin, preview từng snippet mẫu, thoát preview, bật một snippet rồi tải trang cửa hàng; thử sửa, tạo và xoá snippet custom; đăng nhập customer để đối chiếu quyền truy cập. Những bước này là **hướng dẫn QA**, không phải kết quả kiểm thử của agent.
 
 ## Khu vực tài khoản và đơn hàng
