@@ -9,6 +9,7 @@ const nextConfig = {
     const routes = [
       ['/', '/'],
       ['/products/:id', '/products/:id'],
+      ['/products', '/products'],
       ['/cart', '/cart'],
       ['/checkout', '/checkout'],
     ];

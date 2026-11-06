@@ -32,6 +32,12 @@ Các URL `/us`, `/eu`, `/vn` có trang danh sách, chi tiết sản phẩm, gi�
 
 Product card và chi tiết dùng `/api/img?src=<URL>` khi sản phẩm có `supplierImageUrl`; proxy trả ảnh từ nhà cung cấp hoặc SVG MiniShop nếu fetch lỗi. QA có thể dùng ảnh seed của Chuột không dây Aero để xem luồng này. `/partner/out/<partnerId>` lấy URL từ backend rồi thêm `utm_source=minishop`, `utm_medium=partner`, `utm_campaign=<region>` và redirect; `?dest=<URL>` thay URL đích để team partnerships xem trước. Ba ID seed: `700000000000000000000001`, `700000000000000000000002`, `700000000000000000000003`; URL mẫu là example.com và cần đổi thành tracking URL thật trước khi dùng. QA có thể mở từng prefix, xem cookie `region`, đi qua card → giỏ → checkout, rồi xem Location của link đối tác và thử `dest` hợp lệ. Agent chưa chạy các bước QA này.
 
+## A/B testing và biến thể thiết bị
+
+Middleware gán `ab_variant` là A, B hoặc C với xác suất bằng nhau và `device` là `mobile` hoặc `desktop` từ User-Agent cho khách chưa có cookie. Hai cookie lưu 30 ngày. Trang chủ `/`, danh mục `/products` và các URL khu vực tương ứng hiển thị hero/card khác nhau theo variant; danh mục còn đổi mật độ lưới theo device. Footer hiện badge `Variant A · Desktop` (giá trị thực tế theo cookie). Không cần seed thêm; tám sản phẩm sẵn có đủ để QA xem các lưới.
+
+Hướng dẫn QA: mở `/` và `/products`, đối chiếu badge với layout; trong DevTools Application → Cookies, đặt `ab_variant` lần lượt `A`, `B`, `C` và `device` lần lượt `mobile`, `desktop`, rồi tải lại trang để xem từng tổ hợp. Xóa hai cookie và tải lại để xem assignment cho khách mới. Đây là hướng dẫn QA; agent chưa chạy kiểm thử thủ công. Vì HTML được chọn theo cookie ở server, các page này render theo request và không dùng full-route cache chung.
+
 ## Dashboard lab
 
 Đăng nhập tài khoản admin tại `/login`, sau đó mở `/account` → **Mở dashboard mẫu**. Login đặt cookie HttpOnly `minishop_session` sau khi BE xác thực. Middleware FE dùng cookie để hỏi BE `/api/auth/me` và chỉ cho role `admin` vào `/dashboard` và `/api/admin/demo`. Thiếu phiên: dashboard chuyển tới login, API trả 401; tài khoản customer: dashboard chuyển về account, API trả 403. Hai route lab chỉ trả dữ liệu giả và marker `ADMIN_DEMO_ONLY`. `/admin` cũ và API nghiệp vụ BE vẫn có kiểm tra quyền riêng.
