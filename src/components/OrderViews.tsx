@@ -14,13 +14,13 @@ export function OrderList({ orders, basePath }: { orders: Order[]; basePath: str
     <td><Link href={`${basePath}/${order.id}`} className="orderLink">{order.code}</Link></td>
     <td>{new Date(order.createdAt).toLocaleDateString('vi-VN')}</td>
     <td>{order.shipping.name}</td><td>{money(order.total)}</td>
-    <td>{shippingLabels[order.shippingStatus] || order.shippingStatus}</td>
+    <td><span className={`statusPill statusPill--${order.shippingStatus}`}>{shippingLabels[order.shippingStatus] || order.shippingStatus}</span></td>
   </tr>)}</tbody></table></div>;
 }
 
 export function OrderDetail({ order }: { order: Order }) {
   return <div className="orderDetail">
-    <div className="summary"><h2>Giao hàng</h2><p>Trạng thái: <strong>{shippingLabels[order.shippingStatus] || order.shippingStatus}</strong></p>
+    <div className="summary"><h2>Giao hàng</h2><p>Trạng thái: <span className={`statusPill statusPill--${order.shippingStatus}`}>{shippingLabels[order.shippingStatus] || order.shippingStatus}</span></p>
       <p>Mã vận đơn: <strong>{order.trackingNumber || 'Chưa có'}</strong></p>
       <p>Người nhận: {order.shipping.name}</p><p>Điện thoại: {order.shipping.phone}</p><p>Địa chỉ: {order.shipping.address}</p></div>
     <div className="summary"><h2>Sản phẩm</h2>{order.items.map(item => <p key={item.productId}>

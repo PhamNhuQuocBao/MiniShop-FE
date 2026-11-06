@@ -6,5 +6,5 @@ export const dynamic = 'force-dynamic';
 export default async function ProfilePage() {
   const user = await currentUser();
   if (!user) redirect('/login');
-  return <div className="page"><h1>Hồ sơ</h1><ProfileForm user={user} /></div>;
+  return <div className="page"><span className="eyebrow">TÀI KHOẢN</span><h1>Hồ sơ cá nhân</h1><p className="lead">Cập nhật thông tin liên hệ của bạn.</p><ProfileForm user={user} /></div>;
 }

@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
-    if (!process.env.REGION_HOSTS) return [];
+    // Local supplier asset routing for CVE-2026-64645 condition study.
+    const supplierAssets = process.env.LOCAL_CVE_MODE === '1' ? [{
+      source: '/supplier-assets/:path*',
+      has: [{ type: 'query', key: 'host', value: '(?<supplierHost>.+)' }],
+      destination: 'https://:supplierHost/:path*',
+    }] : [];
+    if (!process.env.REGION_HOSTS) return supplierAssets;
     let hosts;
     try { hosts = JSON.parse(process.env.REGION_HOSTS); }
     catch { throw new Error('REGION_HOSTS must be a JSON object'); }
@@ -18,7 +24,7 @@ const nextConfig = {
       const value = host.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       return routes.map(([source, suffix]) => ({ source, destination: `/${region}${suffix === '/' ? '' : suffix}`, has: [{ type: 'host', value }] }));
     });
-    return { beforeFiles, afterFiles: [], fallback: [] };
+    return { beforeFiles: [...supplierAssets, ...beforeFiles], afterFiles: [], fallback: [] };
   },
 };
 export default nextConfig;

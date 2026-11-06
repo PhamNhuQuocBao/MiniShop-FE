@@ -30,7 +30,7 @@ export default async function MarketingPage() {
     <Link href="/admin" className="breadcrumbs">← Quản trị</Link>
     <span className="eyebrow">MARKETING</span>
     <h1>Marketing Script Manager</h1>
-    <p className="lead">Quản lý JavaScript tracking. Paste phần bên trong thẻ script, không paste cả thẻ HTML.</p>
+    <p className="lead">Quản lý JavaScript tracking từ đối tác và agency. Paste nội dung JavaScript để chạy trên storefront.</p>
     <CreateSnippetForm />
     <h2>Danh sách snippet</h2>
     {loadError ? <p className="notice error">{loadError}</p> : snippets.length === 0 ? <p className="notice">Chưa có snippet nào.</p> :
@@ -39,7 +39,7 @@ export default async function MarketingPage() {
       </tr></thead><tbody>{snippets.map(snippet => <Fragment key={snippet.id}><tr>
         <td><strong>{snippet.name}</strong><small>{snippet.id}</small></td>
         <td>{snippet.provider}</td><td>{snippet.placement}</td>
-        <td>{snippet.enabled ? 'Đang bật' : 'Đang tắt'}</td>
+        <td><span className={snippet.enabled ? 'statusPill' : 'statusPill statusPill--off'}>{snippet.enabled ? 'Đang bật' : 'Đang tắt'}</span></td>
         <td>{new Date(snippet.createdAt).toLocaleDateString('vi-VN')}</td>
         <td><div className="marketingActions">
           <form action={previewSnippetAction}><input type="hidden" name="id" value={snippet.id} /><button type="submit" className="smallButton">Preview</button></form>

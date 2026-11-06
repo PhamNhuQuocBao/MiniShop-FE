@@ -27,7 +27,8 @@ export async function middleware(request: NextRequest) {
     if (savedDevice !== device) response.cookies.set('device', device, options);
     return response;
   };
-  if (!request.nextUrl.pathname.startsWith('/dashboard') && !request.nextUrl.pathname.startsWith('/api/admin/demo')) return withVisitorCookies(next());
+  const isAdminPage = process.env.LOCAL_CVE_MODE === '1' && (request.nextUrl.pathname === '/admin' || request.nextUrl.pathname.startsWith('/admin/'));
+  if (!isAdminPage && !request.nextUrl.pathname.startsWith('/dashboard') && !request.nextUrl.pathname.startsWith('/api/admin/demo')) return withVisitorCookies(next());
   const isApi = request.nextUrl.pathname.startsWith('/api/admin/demo');
   const token = request.cookies.get('minishop_session')?.value;
 
@@ -58,7 +59,8 @@ function deny(request: NextRequest, isApi: boolean, status: 401 | 403) {
       { status },
     );
   }
-  const destination = status === 401 ? '/login?next=%2Fdashboard' : '/account?forbidden=1';
+  const nextPath = request.nextUrl.pathname === '/admin' || request.nextUrl.pathname.startsWith('/admin/') ? request.nextUrl.pathname : '/dashboard';
+  const destination = status === 401 ? `/login?next=${encodeURIComponent(nextPath)}` : '/account?forbidden=1';
   return NextResponse.redirect(new URL(destination, request.url));
 }
 

@@ -18,6 +18,8 @@ Build production: `npm run build && npm start`. Health: `/api/health`. Browser g
 
 Đăng nhập tài khoản admin rồi mở `/admin/marketing` để thêm, sửa, xoá, bật/tắt hoặc preview snippet. `scriptBody` chỉ nhận JavaScript thuần; nếu agency gửi nguyên thẻ `<script>`, hãy paste **phần bên trong thẻ**. Preview chạy riêng snippet được chọn trong một giờ, kể cả khi đang tắt; banner “Thoát preview” đưa bạn về trang quản trị. Các snippet seed dùng ID provider giả và mặc định tắt, cần thay bằng ID thật trước khi dùng tracking.
 
+Tám ảnh sản phẩm mẫu nằm trong `public/products` dưới dạng WebP, được tạo bằng AI để minh họa catalog. Backend seed lưu đường dẫn local, mô tả và thông số demo vào MongoDB. Đây không phải ảnh hoặc thông số của sản phẩm thương mại thật.
+
 QA có thể tự kiểm tra sau khi seed backend: mở trang quản trị bằng tài khoản admin, preview từng snippet mẫu, thoát preview, bật một snippet rồi tải trang cửa hàng; thử sửa, tạo và xoá snippet custom; đăng nhập customer để đối chiếu quyền truy cập. Những bước này là **hướng dẫn QA**, không phải kết quả kiểm thử của agent.
 
 ## Khu vực tài khoản và đơn hàng
@@ -46,9 +48,13 @@ Hướng dẫn QA: với khách chưa đăng nhập, thêm Chuột Aero và Bàn
 
 ## Dashboard lab
 
-Đăng nhập tài khoản admin tại `/login`, sau đó mở `/account` → **Mở dashboard mẫu**. Login đặt cookie HttpOnly `minishop_session` sau khi BE xác thực. Middleware FE dùng cookie để hỏi BE `/api/auth/me` và chỉ cho role `admin` vào `/dashboard` và `/api/admin/demo`. Thiếu phiên: dashboard chuyển tới login, API trả 401; tài khoản customer: dashboard chuyển về account, API trả 403. Hai route lab chỉ trả dữ liệu giả và marker `ADMIN_DEMO_ONLY`. `/admin` cũ và API nghiệp vụ BE vẫn có kiểm tra quyền riêng.
+Đăng nhập tài khoản admin tại `/login`, sau đó mở trực tiếp `/dashboard` nếu cần xem fixture cũ. Login đặt cookie HttpOnly `minishop_session` sau khi BE xác thực. Middleware FE dùng cookie để hỏi BE `/api/auth/me` và chỉ cho role `ADMIN` vào `/dashboard` và `/api/admin/demo`. Thiếu phiên: dashboard chuyển tới login, API trả 401; tài khoản customer: dashboard chuyển về account, API trả 403. Hai route cũ chỉ trả dữ liệu giả và marker `ADMIN_DEMO_ONLY`. `/admin` là dashboard quản trị nghiệp vụ.
 
 Đây là cấu hình tính năng cần thiết để nghiên cứu [CVE-2025-29927](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw): route chỉ dựa vào Middleware sẽ chịu tác động nếu Middleware bị bỏ qua trong bản Next bị ảnh hưởng. Chưa chạy PoC hoặc kiểm thử khai thác. Chỉ dùng bản lỗi trong lab cô lập; không công khai fixture này trên Render khi chưa có lớp giới hạn truy cập bên ngoài Next.js.
+
+## Chế độ nghiên cứu CVE trên website local
+
+Các thay đổi cho năm CVE năm 2026, điều kiện áp dụng của từng thay đổi, lệnh chạy và giới hạn kết luận được ghi trong [CVE-STUDY.md](./CVE-STUDY.md). Chế độ này dùng cùng website, dữ liệu và giao diện MiniShop, nhưng chỉ bật khi build/chạy bằng lệnh `*:study` tại local. Lệnh thông thường và cấu hình Render không bật chế độ này.
 
 ## Render
 

@@ -36,6 +36,7 @@ export function ProductSearchResults({ initialProducts, initialQuery, initialErr
       <label>Đến<input name="maxPrice" type="number" min="0" placeholder="Không giới hạn"/></label>
       <button disabled={busy}>{busy ? 'Đang tìm...' : 'Tìm kiếm'}</button>
     </form>
-    {error ? <div className="notice error">{error}</div> : products.length ? <div className={`grid experimentGrid experimentGrid--${variant.toLowerCase()} plpGrid plpGrid--${device}`}>{products.map(product => <ProductCard key={product.id} product={product} prefix={prefix}/>)}</div> : <div className="notice">Không có sản phẩm phù hợp.</div>}
+    {!error && <p className="resultsMeta" role="status">{products.length} sản phẩm phù hợp</p>}
+    {error ? <div className="notice error">{error}</div> : products.length ? <div className={`grid experimentGrid experimentGrid--${variant.toLowerCase()} plpGrid plpGrid--${device}`}>{products.map(product => <ProductCard key={product.id} product={product} prefix={prefix}/>)}</div> : <div className="notice emptyState"><span className="emptyStateIcon" aria-hidden="true">⌕</span><h2>Chưa tìm thấy sản phẩm</h2><p>Thử đổi tên, danh mục hoặc khoảng giá để xem thêm lựa chọn.</p></div>}
   </>;
 }
