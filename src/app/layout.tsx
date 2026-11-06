@@ -4,17 +4,19 @@ import { CartProvider } from '@/components/CartProvider';
 import { Header } from '@/components/Header';
 import { MarketingScripts } from '@/components/MarketingScripts';
 import { VariantBadge } from '@/components/VariantBadge';
+import { currentUser } from '@/lib/auth';
 
 export const metadata = {
   title: 'MiniShop | Phụ kiện công nghệ',
   description: 'Phụ kiện công nghệ cho góc làm việc của bạn',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const user = await currentUser();
   return <html lang="vi"><body>
     <MarketingScripts />
     <CartProvider>
-      <Header />
+      <Header isAdmin={user?.role === 'ADMIN'} />
       <main id="main-content">{children}</main>
       <footer className="footer"><div className="wrap footerMain">
         <div><Link href="/" className="brand footerBrand"><span className="brandMark" aria-hidden="true">M</span><span>Mini<span>Shop</span></span></Link><p>Những món đồ nhỏ giúp không gian làm việc của bạn tốt hơn mỗi ngày.</p></div>

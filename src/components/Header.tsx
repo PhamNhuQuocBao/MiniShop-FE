@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useCart } from './CartProvider';
 import { regionPrefix } from '@/lib/region';
 
-export function Header() {
+export function Header({ isAdmin }: { isAdmin: boolean }) {
   const { items } = useCart();
   const pathname = usePathname();
   const prefix = regionPrefix(pathname);
@@ -21,6 +21,7 @@ export function Header() {
         <Link href={prefix || '/'} aria-current={pathname === (prefix || '/') ? 'page' : undefined}>Trang chủ</Link>
         <Link href={productsPath} aria-current={pathname === productsPath ? 'page' : undefined}>Sản phẩm</Link>
         <Link href="/account" aria-current={pathname.startsWith('/account') ? 'page' : undefined}>Tài khoản</Link>
+        {isAdmin && <Link href="/admin" aria-current={pathname.startsWith('/admin') ? 'page' : undefined}>Quản trị</Link>}
         <Link href={cartPath} className="cartNav" aria-current={pathname === cartPath ? 'page' : undefined}>Giỏ hàng <span className="cartCount">{count}</span></Link>
       </nav>
     </div>
