@@ -11,7 +11,7 @@ const forbidden: MarketingActionState = { status: 403, message: 'Không có quy�
 
 async function adminToken() {
   const user = await currentUser();
-  if (user?.role !== 'admin') return null;
+  if (user?.role !== 'ADMIN') return null;
   return (await cookies()).get('minishop_session')?.value || null;
 }
 

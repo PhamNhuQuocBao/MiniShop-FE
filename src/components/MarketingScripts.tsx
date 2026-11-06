@@ -13,7 +13,7 @@ export async function MarketingScripts() {
   if (previewId) {
     const user = await currentUser();
     const token = (await cookies()).get('minishop_session')?.value;
-    if (user?.role === 'admin' && token) {
+    if (user?.role === 'ADMIN' && token) {
       try {
         preview = (await api<{ snippet: MarketingSnippet }>(`/api/marketing/snippets/${encodeURIComponent(previewId)}`, {
           headers: { Authorization: `Bearer ${token}` },

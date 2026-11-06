@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic';
 export default async function MarketingPage() {
   const user = await currentUser();
   if (!user) redirect('/login');
-  if (user.role !== 'admin') return <div className="wrap page notice error">Bạn không có quyền xem trang này.</div>;
+  if (user.role !== 'ADMIN') redirect('/');
 
   let snippets: MarketingSnippet[] = [];
   let loadError = '';
