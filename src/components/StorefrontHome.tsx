@@ -23,7 +23,7 @@ export async function StorefrontHome({ q, prefix = '', variant, device, page = '
       <div className="heroArt" aria-hidden="true">{hero.art}</div>
     </section>
     <section id="products" className="section"><div className="sectionHead"><div><span className="eyebrow">{isPlp ? 'DANH MỤC SẢN PHẨM' : 'BỘ SƯU TẬP'}</span><h2>{isPlp ? 'Tất cả sản phẩm' : 'Sản phẩm nổi bật'}</h2></div>{!isPlp && <form method="get"><input name="q" defaultValue={q} placeholder="Tìm theo tên sản phẩm..." aria-label="Tìm sản phẩm"/><button>Tìm kiếm</button></form>}</div>
-      {isPlp ? <ProductSearchResults key={q} initialProducts={products} initialQuery={q} initialError={error} prefix={prefix} variant={variant} device={device}/> : error ? <div className="notice error">{error}</div> : products.length ? <div className={`grid experimentGrid experimentGrid--${variant.toLowerCase()}`}>{products.map(p => <ProductCard key={p.id} product={p} prefix={prefix}/>)}</div> : <div className="notice">Không có sản phẩm phù hợp.</div>}
+      {isPlp ? <ProductSearchResults key={q} initialProducts={products} initialQuery={q} initialError={error} prefix={prefix} variant={variant} device={device}/> : error ? <div className="notice error">{error}</div> : products.length ? <div className={`grid experimentGrid experimentGrid--${variant.toLowerCase()}`}>{products.map(p => <ProductCard key={p.id} product={p} prefix={prefix}/>)}</div> : <div className="notice emptyState"><span className="emptyStateIcon" aria-hidden="true">⌕</span><h2>Chưa tìm thấy sản phẩm</h2><p>Thử một từ khóa khác để xem thêm lựa chọn.</p></div>}
     </section>
   </div>;
 }

@@ -1,6 +1,28 @@
 'use client';
+
 import Link from 'next/link';
-import {useCart} from './CartProvider';
-import {usePathname} from 'next/navigation';
-import {regionPrefix} from '@/lib/region';
-export function Header(){const {items}=useCart();const prefix=regionPrefix(usePathname());return <header className="header"><div className="wrap nav"><Link href={prefix||'/'} className="brand">Mini<span>Shop</span></Link><nav><Link href={`${prefix}/products`}>Sản phẩm</Link><Link href={`${prefix}/cart`}>Giỏ hàng ({items.reduce((n,i)=>n+i.quantity,0)})</Link><Link href="/account">Tài khoản</Link></nav></div></header>}
+import { usePathname } from 'next/navigation';
+import { useCart } from './CartProvider';
+import { regionPrefix } from '@/lib/region';
+
+export function Header() {
+  const { items } = useCart();
+  const pathname = usePathname();
+  const prefix = regionPrefix(pathname);
+  const count = items.reduce((total, item) => total + item.quantity, 0);
+  const productsPath = `${prefix}/products`;
+  const cartPath = `${prefix}/cart`;
+
+  return <header className="header">
+    <div className="announcement"><div className="wrap">Phụ kiện công nghệ cho mỗi ngày làm việc tốt hơn <span aria-hidden="true">✦</span> MiniShop</div></div>
+    <div className="wrap nav">
+      <Link href={prefix || '/'} className="brand" aria-label="MiniShop, về trang chủ"><span className="brandMark" aria-hidden="true">M</span><span>Mini<span>Shop</span></span></Link>
+      <nav aria-label="Điều hướng chính" className="mainNav">
+        <Link href={prefix || '/'} aria-current={pathname === (prefix || '/') ? 'page' : undefined}>Trang chủ</Link>
+        <Link href={productsPath} aria-current={pathname === productsPath ? 'page' : undefined}>Sản phẩm</Link>
+        <Link href="/account" aria-current={pathname.startsWith('/account') ? 'page' : undefined}>Tài khoản</Link>
+        <Link href={cartPath} className="cartNav" aria-current={pathname === cartPath ? 'page' : undefined}>Giỏ hàng <span className="cartCount">{count}</span></Link>
+      </nav>
+    </div>
+  </header>;
+}

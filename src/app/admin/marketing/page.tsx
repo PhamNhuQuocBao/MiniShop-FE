@@ -39,7 +39,7 @@ export default async function MarketingPage() {
       </tr></thead><tbody>{snippets.map(snippet => <Fragment key={snippet.id}><tr>
         <td><strong>{snippet.name}</strong><small>{snippet.id}</small></td>
         <td>{snippet.provider}</td><td>{snippet.placement}</td>
-        <td>{snippet.enabled ? 'Đang bật' : 'Đang tắt'}</td>
+        <td><span className={snippet.enabled ? 'statusPill' : 'statusPill statusPill--off'}>{snippet.enabled ? 'Đang bật' : 'Đang tắt'}</span></td>
         <td>{new Date(snippet.createdAt).toLocaleDateString('vi-VN')}</td>
         <td><div className="marketingActions">
           <form action={previewSnippetAction}><input type="hidden" name="id" value={snippet.id} /><button type="submit" className="smallButton">Preview</button></form>

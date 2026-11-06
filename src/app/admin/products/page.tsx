@@ -8,7 +8,7 @@ export default async function AdminProducts() {
   let error = '';
   try { products = (await api<{ products: Product[] }>('/api/products')).products; }
   catch (reason) { error = reason instanceof Error ? reason.message : 'Không tải được sản phẩm'; }
-  return <div className="wrap page"><span className="eyebrow">QUẢN TRỊ</span><h1>Sản phẩm</h1>
+  return <div className="wrap page"><span className="eyebrow">QUẢN TRỊ</span><h1>Sản phẩm</h1><p className="lead">Tìm sản phẩm và xem nhanh giá, tồn kho hiện tại.</p>
     {!error && <AdminProductPicker initialProducts={products}/>}
     {error ? <p className="notice error">{error}</p> : products.length ? <div className="marketingTableWrap"><table className="marketingTable"><thead><tr>
       <th>Tên</th><th>Giá</th><th>Tồn kho</th>
