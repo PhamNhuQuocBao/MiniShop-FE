@@ -1,6 +1,6 @@
 # MiniShop Frontend
 
-Next.js 15.2.0 / React 19.0.0. Đây là repo frontend độc lập; API nằm tại [MiniShop-BE](https://github.com/PhamNhuQuocBao/MiniShop-BE).
+Next.js 15.5.15 / React 19.0.0. Đây là repo frontend độc lập; API nằm tại [MiniShop-BE](https://github.com/PhamNhuQuocBao/MiniShop-BE).
 
 ## Chạy local
 
@@ -50,14 +50,14 @@ Hướng dẫn QA: với khách chưa đăng nhập, thêm Chuột Aero và Bàn
 
 Đăng nhập tài khoản admin tại `/login`, sau đó mở trực tiếp `/dashboard` nếu cần xem fixture cũ. Login đặt cookie HttpOnly `minishop_session` sau khi BE xác thực. Middleware FE dùng cookie để hỏi BE `/api/auth/me` và chỉ cho role `ADMIN` vào `/dashboard` và `/api/admin/demo`. Thiếu phiên: dashboard chuyển tới login, API trả 401; tài khoản customer: dashboard chuyển về account, API trả 403. Hai route cũ chỉ trả dữ liệu giả và marker `ADMIN_DEMO_ONLY`. `/admin` là dashboard quản trị nghiệp vụ.
 
-Đây là cấu hình tính năng cần thiết để nghiên cứu [CVE-2025-29927](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw): route chỉ dựa vào Middleware sẽ chịu tác động nếu Middleware bị bỏ qua trong bản Next bị ảnh hưởng. Chưa chạy PoC hoặc kiểm thử khai thác. Chỉ dùng bản lỗi trong lab cô lập; không công khai fixture này trên Render khi chưa có lớp giới hạn truy cập bên ngoài Next.js.
+Đây là cấu hình tính năng từng dùng để nghiên cứu [CVE-2025-29927](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw). CVE này đã được vá từ Next 15.2.3, nên **không còn tái hiện** trên bản 15.5.15 hiện tại; tài liệu giữ lại để tham khảo lịch sử. Muốn demo phải dùng checkout Next 15.2.0 riêng và chỉ trong lab cô lập.
 
 ## Chế độ nghiên cứu CVE trên website local
 
-Các thay đổi cho năm CVE năm 2026, điều kiện áp dụng của từng thay đổi, lệnh chạy và giới hạn kết luận được ghi trong [CVE-STUDY.md](./CVE-STUDY.md). Chế độ này dùng cùng website, dữ liệu và giao diện MiniShop, nhưng chỉ bật khi build/chạy bằng lệnh `*:study` tại local. Lệnh thông thường và cấu hình Render không bật chế độ này.
+Các thay đổi cho năm CVE năm 2026, điều kiện áp dụng của từng thay đổi, lệnh chạy và giới hạn kết luận được ghi trong [CVE-STUDY.md](./CVE-STUDY.md). Hướng dẫn đầy đủ và kết quả đã chạy ở [docs/lab-cve-reproduction.md](../docs/lab-cve-reproduction.md). Chế độ này dùng cùng website, dữ liệu và giao diện MiniShop, nhưng chỉ bật khi build/chạy bằng lệnh `*:study` tại local. Lệnh thông thường và cấu hình Render không bật chế độ này.
 
 ## Render
 
 Tạo **Web Service** từ repo này, root directory để trống (repo root), build `npm ci && npm run build`, start `npm start`, health `/api/health`, Node `22.18.0`. Đặt `API_BASE_URL=https://<backend-cua-ban>.onrender.com` tại Render trước khi build. Có thể dùng `render.yaml` của repo. Chờ backend và MongoDB sẵn sàng, sau đó deploy FE. Thay `API_BASE_URL` cần redeploy FE.
 
-**Lưu ý bảo mật:** Next.js 15.2.0 được pin theo yêu cầu dự án và npm cảnh báo phiên bản này có lỗ hổng. Không đưa bản này lên public khi chưa đánh giá rủi ro và có lớp bảo vệ phù hợp. Không có dữ liệu/secret thật trong repo.
+**Lưu ý bảo mật:** Next.js 15.5.15 được pin cho lab tái hiện CVE và **vẫn dính 5 CVE** (xem `docs/lab-cve-reproduction.md`). Không deploy bản này lên public. Muốn deploy thật, nâng Next lên bản đã vá (>=15.5.21) và tắt toàn bộ `LOCAL_CVE_MODE`/`*:study`. Không có dữ liệu/secret thật trong repo.
