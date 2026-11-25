@@ -3,6 +3,7 @@ import './globals.css';
 import { CartProvider } from '@/components/CartProvider';
 import { Header } from '@/components/Header';
 import { MarketingScripts } from '@/components/MarketingScripts';
+import { StorefrontBootstrap } from '@/components/StorefrontBootstrap';
 import { VariantBadge } from '@/components/VariantBadge';
 import { currentUser } from '@/lib/auth';
 
@@ -14,6 +15,7 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
   return <html lang="vi"><body>
+    <StorefrontBootstrap />
     <MarketingScripts />
     <CartProvider>
       <Header isAdmin={user?.role === 'ADMIN'} />

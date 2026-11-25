@@ -1,6 +1,6 @@
 # MiniShop Frontend
 
-Next.js 15.5.15 / React 19.0.0. Đây là repo frontend độc lập; API nằm tại [MiniShop-BE](https://github.com/PhamNhuQuocBao/MiniShop-BE).
+Next.js 15.5.6 / React 19.0.0. Đây là repo frontend độc lập; API nằm tại [MiniShop-BE](https://github.com/PhamNhuQuocBao/MiniShop-BE).
 
 ## Chạy local
 
@@ -60,4 +60,4 @@ Các thay đổi cho năm CVE năm 2026, điều kiện áp dụng của từng 
 
 Tạo **Web Service** từ repo này, root directory để trống (repo root), build `npm ci && npm run build`, start `npm start`, health `/api/health`, Node `22.18.0`. Đặt `API_BASE_URL=https://<backend-cua-ban>.onrender.com` tại Render trước khi build. Có thể dùng `render.yaml` của repo. Chờ backend và MongoDB sẵn sàng, sau đó deploy FE. Thay `API_BASE_URL` cần redeploy FE.
 
-**Lưu ý bảo mật:** Next.js 15.5.15 được pin cho lab tái hiện CVE và **vẫn dính 5 CVE** (xem `docs/lab-cve-reproduction.md`). Không deploy bản này lên public. Muốn deploy thật, nâng Next lên bản đã vá (>=15.5.21) và tắt toàn bộ `LOCAL_CVE_MODE`/`*:study`. Không có dữ liệu/secret thật trong repo.
+**Lưu ý bảo mật:** Next.js 15.5.6 được pin cho lab tái hiện CVE (hạ từ 15.5.15 ngày 20/11/2026) và vẫn dính các CVE lab; CVE-2026-64641 không còn đường tái hiện trên bản này (xem `docs/lab-cve-reproduction.md`). Không deploy bản này lên public. Muốn deploy thật, nâng Next lên bản đã vá (>=15.5.21) và tắt toàn bộ `LOCAL_CVE_MODE`/`*:study`. Không có dữ liệu/secret thật trong repo.
