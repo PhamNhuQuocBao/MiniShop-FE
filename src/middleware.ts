@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { CAMPAIGN_COOKIE, campaignFromSearch } from '@/lib/campaign';
 
 type DemoUser = { role: 'CUSTOMER' | 'ADMIN' };
 
@@ -15,16 +16,23 @@ export async function middleware(request: NextRequest) {
   const variant = savedVariant === 'A' || savedVariant === 'B' || savedVariant === 'C' ? savedVariant : (['A', 'B', 'C'] as const)[Math.floor(Math.random() * 3)];
   const savedDevice = request.cookies.get('device')?.value;
   const device = savedDevice === 'mobile' || savedDevice === 'desktop' ? savedDevice : /Mobi|Android|iPhone|iPad/i.test(request.headers.get('user-agent') || '') ? 'mobile' : 'desktop';
+  // Campaign attribution: first touch from an ad/partner link wins, then it is
+  // carried in a cookie for the rest of the session.
+  const savedCampaign = request.cookies.get(CAMPAIGN_COOKIE)?.value;
+  const incomingCampaign = campaignFromSearch(request.nextUrl.searchParams);
+  const campaign = incomingCampaign || savedCampaign || '';
   // Pass newly assigned cookies upstream so the first page render matches the response cookies.
   request.cookies.set('region', region);
   request.cookies.set('ab_variant', variant);
   request.cookies.set('device', device);
+  if (campaign) request.cookies.set(CAMPAIGN_COOKIE, campaign);
   const next = () => NextResponse.next({ request: { headers: new Headers(request.headers) } });
   const withVisitorCookies = (response: NextResponse) => {
     const options = { maxAge: 60 * 60 * 24 * 30, sameSite: 'lax' as const, path: '/' };
     if (savedRegion !== region) response.cookies.set('region', region, options);
     if (savedVariant !== variant) response.cookies.set('ab_variant', variant, options);
     if (savedDevice !== device) response.cookies.set('device', device, options);
+    if (campaign && campaign !== savedCampaign) response.cookies.set(CAMPAIGN_COOKIE, campaign, options);
     return response;
   };
   const isAdminPage = process.env.LOCAL_CVE_MODE === '1' && (request.nextUrl.pathname === '/admin' || request.nextUrl.pathname.startsWith('/admin/'));

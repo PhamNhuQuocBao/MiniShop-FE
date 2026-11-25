@@ -1,11 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    // Lab fixture: allow a large Server Action multipart body so the
+    // CVE-2026-64641 O(n^2) validation path can be exercised. Production keeps
+    // the framework default (1 MB).
+    serverActions: {
+      bodySizeLimit: process.env.LOCAL_CVE_MODE === '1' ? '10mb' : '1mb',
+    },
+  },
   async rewrites() {
     // Local supplier asset routing for CVE-2026-64645 condition study.
     const supplierAssets = process.env.LOCAL_CVE_MODE === '1' ? [{
       source: '/supplier-assets/:path*',
-      has: [{ type: 'query', key: 'host', value: '(?<supplierHost>.+)' }],
-      destination: 'https://:supplierHost/:path*',
+      // Study fixture for CVE-2026-64645: hostname comes from a request query.
+      // The capture group and destination param must be lowercase because Next
+      // parses the destination hostname as a URL (hostnames are lowercased).
+      has: [{ type: 'query', key: 'host', value: '(?<supplierhost>.+)' }],
+      destination: 'https://:supplierhost/:path*',
     }] : [];
     if (!process.env.REGION_HOSTS) return supplierAssets;
     let hosts;
